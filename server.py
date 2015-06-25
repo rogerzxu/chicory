@@ -18,10 +18,18 @@ class MyHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
         if 'turn' in postvars:
             row = int(postvars['turn'][0][0])
             column = int(postvars['turn'][0][1])
-            game.turn(row, column)
-            with open ("templates/minesweeper.html", "r") as myfile:
-                data=myfile.read()
-            html = data.format(grid=game)
+            result = game.turn(row, column)
+            if result:
+                with open ("templates/minesweeper.html", "r") as myfile:
+                    data=myfile.read()
+                if game.check_win():
+                    html = data.format(grid=game, message="YOU WIN")
+                else:
+                    html = data.format(grid=game, message="CONTINUE")
+            else:
+                with open ("templates/minesweeper.html", "r") as myfile:
+                    data=myfile.read()
+                html = data.format(grid=game, message="YOU LOSE")
             self.wfile.write(html)
         else:
             self.send_response(200)
@@ -30,7 +38,7 @@ class MyHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
             game = minesweeper.Minesweeper(int(postvars['height'][0]), int(postvars['width'][0]), int(postvars['mines'][0]))
             with open ("templates/minesweeper.html", "r") as myfile:
                 data=myfile.read()
-            html = data.format(grid=game)
+            html = data.format(grid=game,message="CONTINUE")
             self.wfile.write(html)
 
 Handler = MyHandler

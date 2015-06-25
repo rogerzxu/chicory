@@ -4,6 +4,7 @@ class Minesweeper:
     def __init__(self, height, width, mines):
         self.height = height
         self.width = width
+        self.gameover = False
         self.grid = [['A' for i in xrange(width)] for i in xrange(height)]
         for i in xrange(mines):
             rand1 = randint(0, height-1)
@@ -27,14 +28,26 @@ class Minesweeper:
             self.grid[row][column] = adjMines
             for adjEmpty in adjEmpties:
                 self.turn(adjEmpty[0], adjEmpty[1])
-            return 1
+            return True
         elif self.grid[row][column] == 'X':
-            return -1
+            self.gameover = True
+            return False
+
+    def check_win(self):
+        for row in self.grid:
+            for position in row:
+                if position == 'A':
+                    return False
+        self.gameover = True
+        return True
 
     def __str__(self):
         output = ""
         for row in self.grid:
             for position in row:
-                output = output + " " + str(position) + " "
+                if (position != 'A' and position != 'X') or self.gameover:
+                    output = output + " " + str(position) + " "
+                else:
+                    output = output + " B "
             output = output + "\n"
         return output
