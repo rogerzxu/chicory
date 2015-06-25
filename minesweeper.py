@@ -15,6 +15,9 @@ class Minesweeper:
             self.grid[rand1][rand2] = 'X'
 
     def turn(self, row, column):
+        return self.turn_helper(row, column, True)
+
+    def turn_helper(self, row, column, first_iteration):
         if self.grid[row][column] == 'A':
             adjMines = 0
             adjEmpties = []
@@ -25,9 +28,14 @@ class Minesweeper:
                             adjMines+=1
                         else:
                             adjEmpties.append((i,j))
-            self.grid[row][column] = adjMines
-            for adjEmpty in adjEmpties:
-                self.turn(adjEmpty[0], adjEmpty[1])
+            if first_iteration:
+                self.grid[row][column] = adjMines
+                for adjEmpty in adjEmpties:
+                    self.turn_helper(adjEmpty[0], adjEmpty[1], False)
+            elif adjMines == 0:
+                self.grid[row][column] = 0
+                for adjEmpty in adjEmpties:
+                    self.turn_helper(adjEmpty[0], adjEmpty[1], False)
             return True
         elif self.grid[row][column] == 'X':
             self.gameover = True
