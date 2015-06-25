@@ -5,7 +5,7 @@ $(document).ready(function(){
     var row = -1
     var column = 0
     for (var i = 0, len = str.length; i < len; i++) {
-        if(str[i] == "0" || str[i] == "X"){
+        if(str[i] == "A" || str[i] == "X"){
             var position = "<form action=\"../server.py\" method=\"POST\">" +
             "<button type=\"submit\" name=\"turn\" value=\""+ row.toString() + column.toString() + "\">" + str[i] + "</button>" +
             "</form>"
@@ -16,6 +16,11 @@ $(document).ready(function(){
             $(".game").append("<br />")
             row+=1
             column = 0
+        }
+        else if(str[i] != " "){
+            var position = "<button>"+str[i]+"</button>"
+            $(".game").append(position)
+            column+=1
         }
     }
 });
