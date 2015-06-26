@@ -28,11 +28,8 @@ class Minesweeper:
                             adjMines+=1
                         else:
                             adjEmpties.append((i,j))
-            if first_iteration:
-                self.grid[row][column] = adjMines
-                for adjEmpty in adjEmpties:
-                    self.turn_helper(adjEmpty[0], adjEmpty[1], False)
-            elif adjMines == 0:
+            self.grid[row][column] = adjMines
+            if adjMines == 0:
                 self.grid[row][column] = 0
                 for adjEmpty in adjEmpties:
                     self.turn_helper(adjEmpty[0], adjEmpty[1], False)
